@@ -6,7 +6,7 @@
     <title>Network | Navigation</title>
     <style type="text/css">
     body {
-        font: 10pt sans;
+        font: 8pt sans;
     }
 
     #mynetwork {
@@ -58,8 +58,49 @@
                         scaleFactor: 1,
                         type: 'arrow'
                     }
+                },
+                smooth: {
+                    enabled: true, //setting to true enables curved lines
+                    type: "dynamic",
+                    roundness: 0.5
+                },
+            },
+            // Layout
+            // layout: {
+            //     randomSeed: undefined,
+            //     improvedLayout: true,
+            //     hierarchical: {
+            //         enabled: true,
+            //         levelSeparation: 150,
+            //         nodeSpacing: 100,
+            //         treeSpacing: 200,
+            //         blockShifting: true,
+            //         edgeMinimization: true,
+            //         parentCentralization: false,
+            //         direction: 'UD', // UD, DU, LR, RL
+            //         sortMethod: 'directed' // hubsize, directed
+            //     }
+            // }
+
+
+            physics: {
+                forceAtlas2Based: {
+                    // gravitationalConstant: -.001,
+                    // centralGravity: 0.25,
+                    // springLength: 230,
+                    // springConstant: 1000,
+                    avoidOverlap: 0.2
+                },
+                maxVelocity: 1000,
+                solver: 'forceAtlas2Based',
+                // timestep: 0.35,
+                stabilization: {
+                    enabled: true,
+                    iterations: 1,
+                    updateInterval: 2500
                 }
             }
+
         };
         // Create graph
         network = new vis.Network(container, data, options);
@@ -72,6 +113,13 @@
         // add event listeners
         network.on('select', function(params) {
             document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;
+            var conns = network.getConnectedNodes(params.nodes);
+            if (param.nodes.size > 0) {network.setOptions({ physics: false });} else {}
+            document.getElementById('selection').innerHTML = 'Selection connections; ' + conns;
+        });
+        network.on('click', function(params) {
+            // document.getElementById('selection').innerHTML = 'Selection: ' + params.nodes;
+            network.setOptions({ physics: false });
         });
     }
     </script>
